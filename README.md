@@ -1,6 +1,11 @@
 - 👋 Hi, I’m @andreas-f3g
 - mailto: andreas.f3g@stockhaus-online.de
 <!---
-andreas-f3g/andreas-f3g-distance is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
+andreas-f3g/f3-distance
+
+This project contain Lua script for ETHOS systems one FRSky hardware.
+This software supports training options to practice distance tasks in glider activity. Distance tasks of F3B, F3G and F3F model soaring rules may be accessed for training.
+GPS data via telemetry are necessary at FRSky transmitter site where the lua script is executed.
+The lua script ist executed in a widget of ETHOS system. The configuration of the lua script uses widget configure mechanisms. 
+
 --->
