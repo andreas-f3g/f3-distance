@@ -1,6 +1,6 @@
 -- Lua GPS Point Class
 --
---  F3 Distance Tool for FRSky/ETHOS transmitters and GPS telemetry
+--  F3 Distance Tool for FrSky/ETHOS transmitters and GPS telemetry
 -- 
 --
 --    This program is free software: you can redistribute it and/or modify

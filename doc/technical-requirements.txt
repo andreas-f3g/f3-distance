@@ -1,1 +1,1 @@
-The f3-distance tool is a lua script depending upon ETHOS firmware and FRSky hardware.
+The f3-distance tool is a lua script depending upon ETHOS firmware and FrSky hardware.
