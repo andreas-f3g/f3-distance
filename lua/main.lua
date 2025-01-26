@@ -46,32 +46,18 @@ local function configure(widget)
 
     line = form.addLine("Range (m)")
     local slots = form.getFieldSlots(line, {0, " - ", 0})
-    form.addNumberField(line, slots[1], -150, 10, 
-	function() return widget.min end, 
-	function(value) widget.min = value 
-			widget.race.distance = (-1*value) + widget.max
-			widget.race.center = value end)
+    form.addNumberField(line, slots[1], -150, 10, function() return widget.min end, function(value) widget.min = value  end)
     form.addStaticText(line, slots[2], " - ")
-    form.addNumberField(line, slots[3], 0, 150, 
-    	function() return widget.max end, 
-	function(value) widget.max = value
-			widget.race.distance = value + (-1*widget.min)
-			widget.race.center = (-1*widget.min) end)
+    form.addNumberField(line, slots[3], 0, 150, function() return widget.max end, function(value) widget.max = value end)
     
     line = form.addLine("Direction Slider")
     form.addSourceField(line, nil, function() return widget.direction end, function(value) widget.direction = value end)
 
     line = form.addLine("Position Key")
-    form.addSourceField(line, nil, 
-	function() return widget.confirm end, 
-	function(value) widget.confirm = value 
-			widget.confirmSet = value:value() end)
+    form.addSourceField(line, nil, function() return widget.confirm end, function(value) widget.confirm = value widget.confirmSet = value:value() end)
 
-    line = form.addLine("Start Race")
-    form.addSourceField(line, nil, 
-	function() return widget.start end, 
-	function(value) widget.start = value 
-		        widget.startSet = value:value() end)
+    line = form.addLine("Start Race Switch")
+    form.addSourceField(line, nil, function() return widget.start end, function(value) widget.start = value widget.startSet = value:value() end)
 
     line = form.addLine("GPS Device")
     form.addStaticText(line, nil , "GPS ")
@@ -80,7 +66,7 @@ local function configure(widget)
     line = form.addLine("Color Background")
     form.addColorField(line, nil, function() return widget.color end, function(color) widget.color = color end)
 
-    line = form.addLine("Timer")
+    line = form.addLine("Flight Timer")
     form.addSourceField(line, nil, function() return widget.timer end, function(value) widget.timer = value end)
 
     line = form.addLine("Voice")
@@ -93,88 +79,83 @@ local function paint(widget)
 	local x0 = w/2
 	local y0 = h/2
 
-	if widget.race.running == true then
-	
-		lcd.color(widget.color)
-    		lcd.drawFilledRectangle(0, 0, w, h)
-		lcd.color(BLACK)
-		lcd.font(FONT_S_BOLD)
-		lcd.drawText(2,10,"dir:  "..widget.race.bearingPointA2B.."° / dist:  "..widget.race.distance.." m")
-		lcd.drawText(2,30,"A: LON="..widget.pointA.lon.."°")
-		lcd.drawText(2,50,"   LAT="..widget.pointA.lat.."°")
-		lcd.drawText(2,70,"B: LON="..widget.pointB.lon.."°")
-		lcd.drawText(2,90,"   LAT="..widget.pointB.lat.."°")
-		lcd.font(FONT_XL)
-		lcd.drawText(x0,y0*1.2,math.floor(widget.timer:value()).."sec.", CENTERED)
-		lcd.font(FONT_XXL)
-		lcd.drawText(x0,y0*1.5,"LAP: "..widget.race.lap, CENTERED)
-	else
-		lcd.color(BLACK)
-    		lcd.drawFilledRectangle(0, 0, w, h)
-		lcd.color(WHITE)
-		lcd.font(FONT_XL)
- 		lcd.drawText(4,10,"direction = "..math.floor(180+360*widget.direction:value()/2048).."°")
-		lcd.drawText(4,40,"LON = "..widget.point.lon.."°")
-		lcd.drawText(4,70,"LAT = "..widget.point.lat.."°")
-		lcd.drawText(4,100,"distance  = "..widget.pointA:getDistance(widget.pointB:getRad()).." m")
-		lcd.drawText(4,130,"bearing  = "..math.floor(widget.pointA:getBearing(widget.pointB:getRad())).."°")
+	if widget.gps ~= nil then
+		if widget.race.running == true then
+			lcd.color(widget.color)
+    			lcd.drawFilledRectangle(0, 0, w, h)
+			lcd.color(BLACK)
+			lcd.font(FONT_S_BOLD)
+			lcd.drawText(2,10,"dir:  "..widget.race.bearingPointA2B.."° / dist:  "..widget.race.distance.." m")
+			lcd.drawText(2,30,"A: LON="..widget.pointA.lon.."°")
+			lcd.drawText(2,50,"   LAT="..widget.pointA.lat.."°")
+			lcd.drawText(2,70,"B: LON="..widget.pointB.lon.."°")
+			lcd.drawText(2,90,"   LAT="..widget.pointB.lat.."°")
+			lcd.font(FONT_XL)
+			if widget.timer ~= nil then lcd.drawText(x0,y0*1.2,math.floor(widget.timer:value()).."sec.", CENTERED) end
+			lcd.font(FONT_XXL)
+			lcd.drawText(x0,y0*1.5,"LAP: "..widget.race.lap, CENTERED)
+		else
+			lcd.color(BLACK)
+    			lcd.drawFilledRectangle(0, 0, w, h)
+			lcd.color(WHITE)
+			lcd.font(FONT_XL)
+ 			lcd.drawText(4,10,"direction = "..math.floor(180+360*widget.direction:value()/2048).."°")
+			lcd.drawText(4,40,"LON = "..widget.point.lon.."°")
+			lcd.drawText(4,70,"LAT = "..widget.point.lat.."°")
+			lcd.drawText(4,100,"distance= "..widget.min.."m - "..widget.max.."m")
+			lcd.drawText(4,130,"bearing = "..math.floor(widget.pointA:getBearing(widget.pointB:getRad())).."°")
+		end
 	end
 end
 
 local function wakeup(widget)
-	local gpsLAT
-	local gpsLON
 	if widget.gps ~= nil then
-       		gpsLAT = widget.gps:value(OPTION_LATITUDE)
-       		gpsLON = widget.gps:value(OPTION_LONGITUDE)
-	else
-       	 	-- sim mode
-        	gpsLAT, gpsLON = PointA:get()
-	end
-	widget.point:set(gpsLAT,gpsLON)
+       		local gpsLAT = widget.gps:value(OPTION_LATITUDE)
+       		local gpsLON = widget.gps:value(OPTION_LONGITUDE)
+		widget.point:set(gpsLAT,gpsLON)
 
-	if widget.startSet == widget.start:value() then
-		-- running
-		widget.race.running=true
-		local r=false
-		if widget.race.direction == widget.race.ENTER_BASE_A then
-			r=widget.race:checkBcross(math.floor(widget.pointB:getBearing(widget.point:getRad())))
-        	elseif widget.race.direction == widget.race.ENTER_BASE_B then
-                	r=widget.race:checkAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
-        	else -- before first entry check negative crossing
-                	r=widget.race:checkFirstAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
-		end
-		if r==true then 
-			system.playTone(2400,30) 
-			widget.race:increaseLaps()
-			if widget.voice == true then system.playNumber(widget.race.lap) end
+		if widget.startSet == widget.start:value() then
+			-- running
+			if widget.race.running == false then widget.race:start() end
+			local r=false
+			if widget.race.direction == widget.race.ENTER_BASE_A then
+				r=widget.race:checkBcross(math.floor(widget.pointB:getBearing(widget.point:getRad())))
+        		elseif widget.race.direction == widget.race.ENTER_BASE_B then
+                		r=widget.race:checkAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
+        		else -- before first entry check negative crossing
+                		r=widget.race:checkFirstAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
+        			lcd.invalidate()
+			end
+			if r==true then 
+				system.playTone(2400,30) 
+				widget.race:increaseLaps()
+				if widget.voice == true then system.playNumber(widget.race.lap) end
+        			lcd.invalidate()
+			end
+		else
+			widget.race.running=false
+        		if widget.confirmSet == widget.confirm:value() then
+				-- store position and course
+				system.playTone(1200,30)
+				widget.race:set(math.floor(180+360*widget.direction:value()/2048), widget.max)
+				widget.pointA:set(gpsLAT,gpsLON)
+				if widget.min ~= 0 then -- move base A position
+					local A
+					if widget.min > 0 then
+                        			widget.race.distance = widget.max - widget.min
+						A = widget.point:getPoint(widget.race.bearingPointA2B, widget.min) 
+					else 
+                        			widget.race.distance = widget.max + (-1*widget.min)
+						A = widget.point:getPoint(widget.race.bearingPointB2A, (-1*widget.min))
+					end
+					widget.pointA:set(A.lat, A.lon)
+				end
+				local B = widget.pointA:getPoint(widget.race.bearingPointA2B, widget.race.distance)
+				widget.pointB:set(B.lat, B.lon)
+			end
         		lcd.invalidate()
 		end
-	else
-		widget.race.running=false
-		widget.race.direction=widget.race.NOT_STARTED
-		widget.race.lap=-1
-        	if widget.confirmSet == widget.confirm:value() then
-			-- store position and course
-			system.playTone(1200,30)
-			widget.race:set(math.floor(180+360*widget.direction:value()/2048), ((-1*widget.min) + widget.max))
-			widget.race.lap=-1
-			widget.pointA:set(gpsLAT,gpsLON)
-			if widget.race.center ~= 0 then
-				local A
-				if widget.race.center > 0 then
-					A = widget.pointA:getPoint(widget.race.bearingPointA2B, widget.race.center) 
-				else 
-					A = widget.pointA:getPoint((widget.race.bearingPointA2B + 180) % 360, (-1*widget.race.center))
-				end
-				widget.pointA:set(A.lat, A.lon)
-			end
-			local B = widget.pointA:getPoint(widget.race.bearingPointA2B, widget.race.distance)
-			widget.pointB:set(B.lat, B.lon)
-		end
-        	lcd.invalidate()
 	end
-
 end
 
 local function read(widget)
@@ -189,7 +170,6 @@ local function read(widget)
     widget.color = storage.read("color")
     widget.timer = storage.read("timer")
     widget.voice = storage.read("voice")
-    widget.race.center = storage.read("raceCenter")
 end
 
 local function write(widget)
@@ -204,7 +184,6 @@ local function write(widget)
     storage.write("color", widget.color)
     storage.write("timer", widget.timer)
     storage.write("voice", widget.voice)
-    storage.write("raceCenter", widget.race.center)
 end
 
 local function init()

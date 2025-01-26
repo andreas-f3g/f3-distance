@@ -33,10 +33,8 @@ RaceTrack.set = function (self, bearing2B, distance2B)
   self.ENTER_BASE_A=1
   self.ENTER_BASE_B=2
   self.distance=distance2B -- meter
-  self.center=0 -- position
-  self.maxTime=240 -- sec.
   self.direction=self.NOT_STARTED -- 0=nostart@A, 1=entry@A, 2=entry@B
-  self.lap=0
+  self.lap=-1
   self.running=false
   self.bearingPointA2B=bearing2B
   self.relCourse2PointA={} -- array 0..359 is not lua like!
@@ -46,6 +44,12 @@ RaceTrack.set = function (self, bearing2B, distance2B)
   self.relCourse2PointB={} -- array 0..359 is not lua like!
   self.relCourse2PointB=self.setCrossing(self.relCourse2PointB, self.bearingPointB2A)
   self.bCrossed=0  
+end
+
+RaceTrack.start = function (self)
+  self.lap=-1
+  self.running=true
+  self.direction=self.NOT_STARTED
 end
 
 RaceTrack.setCrossing = function(relCourse, bearing)
@@ -60,16 +64,6 @@ RaceTrack.setCrossing = function(relCourse, bearing)
         	c=c+1   
 	end
 	return relCourse
-end
-
-RaceTrack.checkCross = function(self,bearing)
-	if self.direction == self.ENTER_BASE_A then
-		return self.checkBcross(self,math.floor(bearing))
-	elseif self.direction == self.ENTER_BASE_B then
-		return self.checkAcross(self,math.floor(bearing))
-	else -- before first entry check negative crossing
-		return self.checkFirstAcross(self,math.floor(bearing))
-	end
 end
 
 RaceTrack.checkFirstAcross = function(self,bearing)
