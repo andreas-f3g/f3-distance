@@ -1,1 +1,6 @@
-The f3-distance tool is a lua script depending upon ETHOS firmware and FrSky hardware.
+The f3-distance tool TaskB is a Lua script depending upon ETHOS firmware and FrSky hardware.
+
+The software is in use with:
+- FrSky X18SE; ETHOS 1.4.7 EU;  FrSky GPS Sensor ADV
+- TWIN X Lite; ETHOS 1.4.14 EU; FrSky GPS Sensor ADV
+
