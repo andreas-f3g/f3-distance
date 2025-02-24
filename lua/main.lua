@@ -20,10 +20,10 @@ if GPSPoint == nil then
 GPSPoint=dofile("GPSPoint.lua")
 end
 
-PointA=GPSPoint.new(GPSPoint)
-PointB=GPSPoint.new(GPSPoint)
-PointA:set(51.546700,7.412600)
-PointB:set(51.546800,7.413701)
+--PointA=GPSPoint.new(GPSPoint)
+--PointB=GPSPoint.new(GPSPoint)
+--PointA:set(51.546700,7.412600)
+--PointB:set(51.546800,7.413701)
 
 if Track == nil then
 Track=dofile("RaceTrack.lua")
@@ -76,9 +76,6 @@ end
 
 local function paint(widget)
 	local w, h = lcd.getWindowSize()
-	local x0 = w/2
-	local y0 = h/2
-
 	if widget.gps ~= nil then
 		if widget.race.running == true then
 			lcd.color(widget.color)
@@ -91,9 +88,11 @@ local function paint(widget)
 			lcd.drawText(2,70,"B: LON="..widget.pointB.lon.."°")
 			lcd.drawText(2,90,"   LAT="..widget.pointB.lat.."°")
 			lcd.font(FONT_XL)
-			if widget.timer ~= nil then lcd.drawText(x0,y0*1.2,math.floor(widget.timer:value()).."sec.", CENTERED) end
+			if widget.timer ~= nil then
+				lcd.drawText(w/2,(h/2)*1.2,math.floor(widget.timer:value()).."sec.", CENTERED) 
+			end
 			lcd.font(FONT_XXL)
-			lcd.drawText(x0,y0*1.5,"LAP: "..widget.race.lap, CENTERED)
+			lcd.drawText(w/2,(h/2)*1.5,"LAP: "..widget.race.lap, CENTERED)
 		else
 			lcd.color(BLACK)
     			lcd.drawFilledRectangle(0, 0, w, h)
@@ -110,8 +109,8 @@ end
 
 local function wakeup(widget)
 	if widget.gps ~= nil then
-       		local gpsLAT = widget.gps:value(OPTION_LATITUDE)
-       		local gpsLON = widget.gps:value(OPTION_LONGITUDE)
+       		local gpsLAT = widget.gps:value({options=OPTION_LATITUDE})
+       		local gpsLON = widget.gps:value({options=OPTION_LONGITUDE})
 		widget.point:set(gpsLAT,gpsLON)
 
 		if widget.startSet == widget.start:value() then
