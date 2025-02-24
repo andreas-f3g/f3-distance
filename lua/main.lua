@@ -108,9 +108,17 @@ local function paint(widget)
 end
 
 local function wakeup(widget)
+	local gpsLAT
+	local gpsLON
 	if widget.gps ~= nil then
-       		local gpsLAT = widget.gps:value({options=OPTION_LATITUDE})
-       		local gpsLON = widget.gps:value({options=OPTION_LONGITUDE})
+		local version=system.getVersion().minor
+		if version < 5 then
+       			gpsLAT = widget.gps:value(OPTION_LATITUDE)
+       			gpsLON = widget.gps:value(OPTION_LONGITUDE)
+		else
+	       		gpsLAT = widget.gps:value({options=OPTION_LATITUDE})
+       			gpsLON = widget.gps:value({options=OPTION_LONGITUDE})
+		end
 		widget.point:set(gpsLAT,gpsLON)
 
 		if widget.startSet == widget.start:value() then
