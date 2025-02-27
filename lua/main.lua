@@ -20,11 +20,6 @@ if GPSPoint == nil then
 GPSPoint=dofile("GPSPoint.lua")
 end
 
---PointA=GPSPoint.new(GPSPoint)
---PointB=GPSPoint.new(GPSPoint)
---PointA:set(51.546700,7.412600)
---PointB:set(51.546800,7.413701)
-
 if Track == nil then
 Track=dofile("RaceTrack.lua")
 end
@@ -35,6 +30,7 @@ local function name(widget)
 end
 
 local red
+local crossTime = 0
 
 local function create()
 	red=lcd.RGB(255,0,0)
@@ -110,7 +106,7 @@ end
 local function wakeup(widget)
 	local gpsLAT
 	local gpsLON
-	if widget.gps ~= nil then
+	if (widget.gps ~= nil) and ((os.clock() - crossTime) >1)then
 		local version=system.getVersion().minor
 		if version < 5 then
        			gpsLAT = widget.gps:value(OPTION_LATITUDE)
@@ -134,6 +130,7 @@ local function wakeup(widget)
         			lcd.invalidate()
 			end
 			if r==true then 
+				crossTime=os.clock()
 				system.playTone(2400,30) 
 				widget.race:increaseLaps()
 				if widget.voice == true then system.playNumber(widget.race.lap) end
