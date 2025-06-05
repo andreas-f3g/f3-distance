@@ -1,0 +1,15 @@
+Short Note List about futher TODOs
+Kurze TODO-Liste für die Weiterentwicklung
+
+- when race start is inside course a separate signal is required to leave and cross base A outside
+/ Wenn der Start ist in der Strecke soll ein Signal gegeben werden und die Strecke über Base A verlassen werden
+
+- reset associated timer when first cross base A
+/ Zurücksetzen des konfigurierten Timers bei erstem Überflug Base A
+
+- additional widget configuration with max laps to support F3F programm
+/ Zusätzliche Widget-Konfiguration zum Setzen einer maximalen Streckenzahl für F3F
+
+- precise angle measurement for flights on more far away parallel course
+/ Steigerung der Winkel-Genauigkeit für Flüge weiter draussen auf Parallelkurs
+
