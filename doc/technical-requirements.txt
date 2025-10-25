@@ -4,4 +4,4 @@ The software is in use with:
 - FrSky X18SE; ETHOS 1.4.7 EU;  FrSky GPS Sensor ADV
 - TWIN X Lite; ETHOS 1.4.14 EU; FrSky GPS Sensor ADV
 - TWIN X Lite; ETHOS 1.5.15 EU; FrSky GPS Sensor ADV
-
+- FrSky X20; ETHOS 1.2.6 EU; FrSky GPS Sensor ADV
