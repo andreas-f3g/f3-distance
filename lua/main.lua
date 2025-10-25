@@ -122,11 +122,11 @@ local function wakeup(widget)
 			if widget.race.running == false then widget.race:start() end
 			local r=false
 			if widget.race.direction == widget.race.ENTER_BASE_A then
-				r=widget.race:checkBcross(math.floor(widget.pointB:getBearing(widget.point:getRad())))
+				r=widget.race:checkBcross(math.floor(widget.pointB:getBearing(widget.point:getRad())*10)/10)
         		elseif widget.race.direction == widget.race.ENTER_BASE_B then
-                		r=widget.race:checkAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
+                		r=widget.race:checkAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())*10)/10)
         		else -- before first entry check negative crossing
-                		r=widget.race:checkFirstAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())))
+                		r=widget.race:checkFirstAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())*10)/10)
         			lcd.invalidate()
 			end
 			if r==true then 

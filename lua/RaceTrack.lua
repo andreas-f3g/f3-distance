@@ -53,13 +53,13 @@ RaceTrack.start = function (self)
 end
 
 RaceTrack.setCrossing = function(relCourse, bearing)
-	local course=math.abs(bearing)
+	local course=math.abs(bearing*10)
 	local c=0
-	for i=course,(course+360) do
-        	local j = i %360
-        	relCourse[j]=c
-        	if c == 180 then 
-                	c=-180
+	for i=course,(course+3600) do
+        	local j = i %3600
+        	relCourse[j/10]=c/10
+        	if c == 1800 then 
+                	c=-1800
         	end
         	c=c+1   
 	end
