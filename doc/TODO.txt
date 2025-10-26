@@ -10,3 +10,5 @@ Kurze TODO-Liste für die Weiterentwicklung
 - additional widget configuration with max laps to support F3F programm
 / Zusätzliche Widget-Konfiguration zum Setzen einer maximalen Streckenzahl für F3F
 
+- modul architecture redesign to support different requirements in contests
+/ Änderung der Modularchitektur zur besseren Anpassung an verschiedene Wettbewerbsarten
