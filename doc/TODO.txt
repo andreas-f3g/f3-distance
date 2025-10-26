@@ -10,6 +10,4 @@ Kurze TODO-Liste für die Weiterentwicklung
 - additional widget configuration with max laps to support F3F programm
 / Zusätzliche Widget-Konfiguration zum Setzen einer maximalen Streckenzahl für F3F
 
-- precise angle measurement for flights on more far away parallel course
-/ Steigerung der Winkel-Genauigkeit für Flüge weiter draussen auf Parallelkurs
 
