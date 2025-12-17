@@ -18,6 +18,7 @@
 Display = {}
 
 Display.paint = function (widget)
+    if widget ~= nil then
 	local w, h = lcd.getWindowSize()
 	if widget.gps ~= nil then
 		if widget.race.running == true then
@@ -48,6 +49,7 @@ Display.paint = function (widget)
 			lcd.drawText(4,130,"bearing = "..math.floor(widget.pointA:getBearing(widget.pointB:getRad())).."°")
 		end
 	end
+   end
 end
 
 return Display

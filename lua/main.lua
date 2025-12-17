@@ -24,8 +24,8 @@ if Track == nil then
 Track=dofile("RaceTrack.lua")
 end
 
-if Configure == nil then
-Configure=dofile("Configure.lua")
+if Conf == nil then
+Conf=dofile("Configure.lua")
 end
 
 if Display == nil then
@@ -36,24 +36,8 @@ if Event == nil then
 Event=dofile("Event.lua")
 end
 
-local function create ()
-	return Configure.create()
-end
-
-local function config (widget)
-	Configure.config(widget)
-end
-
-local function read (widget)
-	Configure.read(widget)
-end
-
-local function write (widget)
-	Configure.write(widget)
-end
-
-init = function ()
-        system.registerWidget({key="taskb", name=Configure.Name, create=create, paint=Display.paint, wakeup=Event.wakeup, configure=config, read=read, write=write})
+local function init ()
+        system.registerWidget({key="taskb", name=Conf.Name, create=Conf.create, paint=Display.paint, wakeup=Event.wakeup, configure=Conf.config, read=Conf.read, write=Conf.write})
 end 
 
 return {init=init}

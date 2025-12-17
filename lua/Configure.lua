@@ -64,6 +64,7 @@ Configure.config = function (widget)
 end
 
 Configure.read = function(widget)
+  if widget ~= nil then
     widget.min = storage.read("min")
     widget.max = storage.read("max")
     widget.confirm = storage.read("confirm")
@@ -75,9 +76,11 @@ Configure.read = function(widget)
     widget.color = storage.read("color")
     widget.timer = storage.read("timer")
     widget.voice = storage.read("voice")
+  end
 end
 
 Configure.write = function(widget)
+  if widget ~= nil then
     storage.write("min", widget.min)
     storage.write("max", widget.max)
     storage.write("confirm", widget.confirm)
@@ -89,6 +92,7 @@ Configure.write = function(widget)
     storage.write("color", widget.color)
     storage.write("timer", widget.timer)
     storage.write("voice", widget.voice)
+  end
 end
 
 return Configure
