@@ -18,10 +18,12 @@
 
 Event = {}
 
-Display.wakeup = function (widget)
+Event.crossTime=0
+
+Event.wakeup = function (widget)
 	local gpsLAT
 	local gpsLON
-	if (widget.gps ~= nil) and ((os.clock() - crossTime) >1)then
+	if (widget.gps ~= nil) and ((os.clock() - Event.crossTime) >1)then
 		local version=system.getVersion().minor
 		if version < 5 then
        			gpsLAT = widget.gps:value(OPTION_LATITUDE)
@@ -37,15 +39,15 @@ Display.wakeup = function (widget)
 			if widget.race.running == false then widget.race:start() end
 			local r=false
 			if widget.race.direction == widget.race.ENTER_BASE_A then
-				r=widget.race:checkBcross(math.floor(widget.pointB:getBearing(widget.point:getRad())*10)/10)
+				r=widget.race:checkBcross(widget.pointB:getBearing(widget.point:getRad()))
         		elseif widget.race.direction == widget.race.ENTER_BASE_B then
-                		r=widget.race:checkAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())*10)/10)
+                		r=widget.race:checkAcross(widget.pointA:getBearing(widget.point:getRad()))
         		else -- before first entry check negative crossing
-                		r=widget.race:checkFirstAcross(math.floor(widget.pointA:getBearing(widget.point:getRad())*10)/10)
+                		r=widget.race:checkFirstAcross(widget.pointA:getBearing(widget.point:getRad()))
         			lcd.invalidate()
 			end
 			if r==true then 
-				crossTime=os.clock()
+				Event.crossTime=os.clock()
 				system.playTone(2400,30) 
 				widget.race:increaseLaps()
 				if widget.voice == true then system.playNumber(widget.race.lap) end
@@ -58,6 +60,7 @@ Display.wakeup = function (widget)
 				system.playTone(1200,30)
 				widget.race:set(math.floor(180+360*widget.direction:value()/2048), widget.max)
 				widget.pointA:set(gpsLAT,gpsLON)
+				widget.race.distance = widget.max
 				if widget.min ~= 0 then -- move base A position
 					local A
 					if widget.min > 0 then

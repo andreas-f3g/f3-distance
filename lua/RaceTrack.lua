@@ -17,33 +17,17 @@
 
 local RaceTrack = {}
 
-RaceTrack.new = function (self, object)
-  object = object or {}
-  setmetatable(object, self)
-  self.__index = self
-  return object
-end
-
 RaceTrack.NOT_STARTED=0
 RaceTrack.ENTER_BASE_A=1
 RaceTrack.ENTER_BASE_B=2
 
 RaceTrack.set = function (self, bearing2B, distance2B)
-  self.NOT_STARTED=0
-  self.ENTER_BASE_A=1
-  self.ENTER_BASE_B=2
   self.distance=distance2B -- meter
   self.direction=self.NOT_STARTED -- 0=nostart@A, 1=entry@A, 2=entry@B
   self.lap=-1
   self.running=false
   self.bearingPointA2B=bearing2B
-  self.relCourse2PointA={} -- array 0..359 is not lua like!
-  self.relCourse2PointA=self.setCrossing(self.relCourse2PointA, self.bearingPointA2B)
-  self.aCrossed=0  
   self.bearingPointB2A=(bearing2B+180)%360
-  self.relCourse2PointB={} -- array 0..359 is not lua like!
-  self.relCourse2PointB=self.setCrossing(self.relCourse2PointB, self.bearingPointB2A)
-  self.bCrossed=0  
 end
 
 RaceTrack.start = function (self)
@@ -52,45 +36,35 @@ RaceTrack.start = function (self)
   self.direction=self.NOT_STARTED
 end
 
-RaceTrack.setCrossing = function(relCourse, bearing)
-	local course=math.abs(bearing*10)
-	local c=0
-	for i=course,(course+3600) do
-        	local j = i %3600
-        	relCourse[j/10]=c/10
-        	if c == 1800 then 
-                	c=-1800
-        	end
-        	c=c+1   
+RaceTrack.checkCrossing = function (self,base,gps)
+	if ((base+270) < gps+360) or ((base+450) > (gps+360)) then
+		return true
 	end
-	return relCourse
+	return false
 end
 
 RaceTrack.checkFirstAcross = function(self,bearing)
-	if math.abs(self.relCourse2PointA[bearing]) <= 90 then
-			self.direction=self.ENTER_BASE_A
-			return true, "A", self.relCourse2PointA[bearing]
-	else
-			return false, "A", self.relCourse2PointA[bearing]
+	if not self.checkCrossing(self,self.bearingPointA2B,bearing) then
+		self.direction=self.ENTER_BASE_A
+		return true
 	end
+	return false
 end
 
 RaceTrack.checkAcross = function(self,bearing)
-	if math.abs(self.relCourse2PointA[bearing]) >= 90 then
+	if self.checkself.Crossing(self.bearingPointA2B,bearing) then
 		self.direction=self.ENTER_BASE_A
-		return true, "A", self.relCourse2PointA[bearing]
-	else
-		return false, "A", self.relCourse2PointA[bearing]
+		return true
 	end
+	return false
 end
 
 RaceTrack.checkBcross = function(self,bearing)
-	if math.abs(self.relCourse2PointB[bearing]) >= 90 then
+	if self.checkCrossing(self.bearingPointB2A,bearing) then
 		self.direction=self.ENTER_BASE_B
-		return true, "B", self.relCourse2PointB[bearing]
-	else
-		return false, "B", self.relCourse2PointB[bearing]
+		return true
 	end
+	return false
 end
 
 RaceTrack.getDirection = function(self)

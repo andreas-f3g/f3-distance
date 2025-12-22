@@ -36,8 +36,16 @@ if Event == nil then
 Event=dofile("Event.lua")
 end
 
+
+local function create ()
+        red=lcd.RGB(255,0,0)
+        Track:set(0,0)
+        return {color=Conf.red, min=0, max=150, confirm=nil, confirmSet=0, direction=nil, directionValue=0, gps=nil, point=GPSPoint.new(GPSPoint), pointA=GPSPoint.new(GPSPoint), pointB=GPSPoint.new(GPSPoint), race=Track, start=nil, startSet=0, timer=nil, voice=false}
+end
+
+
 local function init ()
-        system.registerWidget({key="taskb", name=Conf.Name, create=Conf.create, paint=Display.paint, wakeup=Event.wakeup, configure=Conf.config, read=Conf.read, write=Conf.write})
+        system.registerWidget({key="taskb", name=Conf.Name, create=create, paint=Display.paint, wakeup=Event.wakeup, configure=Conf.config, read=Conf.read, write=Conf.write})
 end 
 
 return {init=init}

@@ -24,6 +24,10 @@ Point.new = function (self, object)
   object = object or {}
   setmetatable(object, self)
   self.__index = self
+  self.lat=0
+  self.lon=0
+  self.latRad=0
+  self.lonRad=0
   return object
 end
 
@@ -51,7 +55,9 @@ Point.getLon = function(self)
 end
 
 Point.getBearing =function (self, lat, lon)
-
+  if (lat==nil) or (lon==nil) or (self.latRad==nil) or (self.lonRad==nil) then
+     return -1
+  end
   local bearing = math.deg(math.atan(
 		    math.sin(lon - self.lonRad) * math.cos(lat), 
 		    math.cos(self.latRad) * math.sin(lat) - math.sin(self.latRad) * math.cos(lat) * math.cos(lat - self.latRad)

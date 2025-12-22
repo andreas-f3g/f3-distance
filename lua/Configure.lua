@@ -18,17 +18,10 @@
 local Configure = {}
 
 local red
-local crossTime = 0
 
 Configure.Name = function (widget)
     local myname = "F3-Distance"
     return myname
-end
-
-Configure.create = function ()
-	red=lcd.RGB(255,0,0)
-	Track:set(0)
-	return {color=red, min=0, max=150, confirm=nil, confirmSet=0, direction=nil, directionValue=0, gps=nil, point=GPSPoint.new(GPSPoint), pointA=GPSPoint.new(GPSPoint), pointB=GPSPoint.new(GPSPoint), race=Track, start=nil, startSet=0, timer=nil, voice=false}
 end
 
 Configure.config = function (widget)
