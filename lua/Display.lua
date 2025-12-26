@@ -47,6 +47,15 @@ Display.paint = function (widget)
 			lcd.drawText(4,70,"LAT = "..widget.point.lat.."°")
 			lcd.drawText(4,100,"distance= "..widget.min.."m - "..widget.max.."m")
 			lcd.drawText(4,130,"bearing = "..math.floor(widget.pointA:getBearing(widget.pointB:getRad())).."°")
+				-- diagnostics
+                                lcd.font(FONT_XL)
+                                lcd.drawText(200,10,"test:  "..math.floor(widget.direction:value()/5).."m")
+                                lcd.drawText(200,30,"LON = "..widget.point.lon.."°")
+                                lcd.drawText(200,50,"LAT = "..widget.point.lat.."°")
+                                lcd.drawText(200,70,"TO A= "..widget.pointA:getBearing(widget.point:getRad()).."°")
+                                lcd.drawText(200,90,"TO B= "..widget.pointB:getBearing(widget.point:getRad()).."°")
+
+
 		end
 	end
    end

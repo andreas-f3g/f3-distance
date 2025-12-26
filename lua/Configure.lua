@@ -17,7 +17,10 @@
 
 local Configure = {}
 
-local red
+Configure.create = function ()
+        red=lcd.RGB(255,0,0)
+        return {color=Conf, min=0, max=150, confirm=nil, confirmSet=0, direction=nil, directionValue=0, gps=nil, point=GPSPoint.new(GPSPoint), pointA=GPSPoint.new(GPSPoint), pointB=GPSPoint.new(GPSPoint), race=Track, start=nil, startSet=0, timer=nil, voice=false, maxlap=0, param1=nil, param2=nil}
+end
 
 Configure.Name = function (widget)
     local myname = "F3-Distance"
@@ -54,6 +57,9 @@ Configure.config = function (widget)
     line = form.addLine("Voice")
     form.addBooleanField(line, nil, function() return widget.voice end, function(value) widget.voice = value end)
 
+    line = form.addLine("Lap Counter")
+    form.addNumberField(line, nil, 0, 10, function() return widget.maxlap end, function(value) widget.maxlap = value  end)
+
 end
 
 Configure.read = function(widget)
@@ -69,6 +75,7 @@ Configure.read = function(widget)
     widget.color = storage.read("color")
     widget.timer = storage.read("timer")
     widget.voice = storage.read("voice")
+    widget.maxlap = storage.read("maxlap")
   end
 end
 
@@ -85,6 +92,7 @@ Configure.write = function(widget)
     storage.write("color", widget.color)
     storage.write("timer", widget.timer)
     storage.write("voice", widget.voice)
+    storage.write("maxlap", widget.maxlap)
   end
 end
 

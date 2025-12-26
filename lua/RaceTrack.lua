@@ -36,15 +36,15 @@ RaceTrack.start = function (self)
   self.direction=self.NOT_STARTED
 end
 
-RaceTrack.checkCrossing = function (self,base,gps)
-	if ((base+270) < gps+360) or ((base+450) > (gps+360)) then
+function checkCrossing (base,gps)
+	if ((base+270) <= gps+360) or ((base+450) >= (gps+360)) then
 		return true
 	end
 	return false
 end
 
 RaceTrack.checkFirstAcross = function(self,bearing)
-	if not self.checkCrossing(self,self.bearingPointA2B,bearing) then
+	if checkCrossing(self.bearingPointA2B,bearing) then
 		self.direction=self.ENTER_BASE_A
 		return true
 	end
@@ -52,7 +52,7 @@ RaceTrack.checkFirstAcross = function(self,bearing)
 end
 
 RaceTrack.checkAcross = function(self,bearing)
-	if self.checkself.Crossing(self.bearingPointA2B,bearing) then
+	if checkCrossing(self.bearingPointA2B,bearing) then
 		self.direction=self.ENTER_BASE_A
 		return true
 	end
@@ -60,7 +60,7 @@ RaceTrack.checkAcross = function(self,bearing)
 end
 
 RaceTrack.checkBcross = function(self,bearing)
-	if self.checkCrossing(self.bearingPointB2A,bearing) then
+	if checkCrossing(self.bearingPointB2A,bearing) then
 		self.direction=self.ENTER_BASE_B
 		return true
 	end
