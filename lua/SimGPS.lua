@@ -1,4 +1,4 @@
--- Lua Form widget part
+-- Lua simulte telemetry data
 --
 --  F3 Distance Tool for FrSky/ETHOS transmitters and GPS telemetry
 --

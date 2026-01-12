@@ -22,7 +22,11 @@ Event.crossTime=0
 
 Event.wakeup = function (widget)
 	if   ( (widget.gps ~= nil) and ((os.clock() - Event.crossTime) >1) ) then
+		local gpsLAT
+		local gpsLON
 
+--		gpsLAT, gpsLON = GPSData:readPosition(widget)
+--		widget.point:set(gpsLAT, gpsLON) 
 		widget.point:set(GPSData:readPosition(widget))
 
 		if widget.startSet == widget.start:value() then
@@ -50,7 +54,8 @@ Event.wakeup = function (widget)
 				-- store position and course
 				system.playTone(1200,30)
 				widget.race:set(math.floor(180+360*widget.direction:value()/2048), widget.max)
-				widget.pointA:set(gpsLAT,gpsLON)
+--				widget.pointA:set(gpsLAT,gpsLON)
+				widget.pointA:set(widget.point:get())
 				widget.race.distance = widget.max
 				if widget.min ~= 0 then -- move base A position
 					local A

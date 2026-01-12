@@ -1,4 +1,4 @@
--- Lua Form widget part
+-- Lua Telemetry read
 --
 --  F3 Distance Tool for FrSky/ETHOS transmitters and GPS telemetry
 --
